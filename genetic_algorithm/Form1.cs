@@ -13,5 +13,6 @@ namespace genetic_algorithm
         {
 
         }
+
     }
 }

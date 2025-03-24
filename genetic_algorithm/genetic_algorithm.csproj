@@ -8,4 +8,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="HelixToolkit.Wpf" Version="2.26.0" />
+    <PackageReference Include="ScottPlot.WinForms" Version="5.0.55" />
+    <PackageReference Include="ZedGraph" Version="5.1.7" />
+  </ItemGroup>
+
 </Project>
