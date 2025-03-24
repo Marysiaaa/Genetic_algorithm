@@ -8,8 +8,7 @@ namespace genetic_algorithm;
 
 internal class GeneticAlgoritm
 {
-
-    Dictionary<int, List<Osobnik>> HistoriaPopulacji = new Dictionary<int, List<Osobnik>>();
+    public Dictionary<int, List<Osobnik>> HistoriaPopulacji = new Dictionary<int, List<Osobnik>>();
     const int rozmiar_populacji = 9;
     const int rozmiarTurnieju = 2;
 
@@ -19,7 +18,7 @@ internal class GeneticAlgoritm
     const double ZDMin = 0;
     const double ZDMax = 100;
 
-    public void Start()
+    public Dictionary<int, List<Osobnik>>  Start()
     {
         var populacja = StworzPopulacje(rozmiar_populacji);
         for (int i = 0; i < liczbaGeneracji; i++)
@@ -41,7 +40,11 @@ internal class GeneticAlgoritm
             Console.WriteLine($"Generacja {i + 1}: Najlepsze = {najlepszeDopasowanie.Dopasowanie}, Średnie = {srednieDopasowanie}");
             Console.WriteLine($"X1: {najlepszeDopasowanie.X1}, X2: {najlepszeDopasowanie.X2}");
             populacja = nowaPopulacja;
+            nowaPopulacja.Add(najlepszy);
+            HistoriaPopulacji.Add(i, nowaPopulacja);
         }
+        return HistoriaPopulacji;
+       
     }
 
     private List<Osobnik> StworzPopulacje(int wielkoscPopulacji)
