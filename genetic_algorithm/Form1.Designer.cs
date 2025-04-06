@@ -36,8 +36,8 @@
             tabPage2 = new TabPage();
             dataGridView2 = new DataGridView();
             tabPage3 = new TabPage();
-            dataGridView3 = new DataGridView();
             button3 = new Button();
+            dataGridView3 = new DataGridView();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
@@ -57,21 +57,21 @@
             // 
             // button1
             // 
-            button1.Location = new Point(383, 482);
+            button1.Location = new Point(362, 490);
             button1.Name = "button1";
             button1.Size = new Size(121, 45);
             button1.TabIndex = 1;
-            button1.Text = "Start";
+            button1.Text = "Uruchom Zadanie 1 ";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
             // button2
             // 
-            button2.Location = new Point(350, 494);
+            button2.Location = new Point(359, 471);
             button2.Name = "button2";
             button2.Size = new Size(122, 49);
             button2.TabIndex = 2;
-            button2.Text = "button2";
+            button2.Text = "Uruchom zadanie 2";
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
             // 
@@ -131,15 +131,6 @@
             tabPage3.Text = "tabPage3";
             tabPage3.UseVisualStyleBackColor = true;
             // 
-            // dataGridView3
-            // 
-            dataGridView3.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView3.Location = new Point(6, 6);
-            dataGridView3.Name = "dataGridView3";
-            dataGridView3.RowTemplate.Height = 25;
-            dataGridView3.Size = new Size(830, 422);
-            dataGridView3.TabIndex = 0;
-            // 
             // button3
             // 
             button3.Location = new Point(363, 497);
@@ -148,6 +139,15 @@
             button3.TabIndex = 1;
             button3.Text = "button3";
             button3.UseVisualStyleBackColor = true;
+            // 
+            // dataGridView3
+            // 
+            dataGridView3.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView3.Location = new Point(6, 6);
+            dataGridView3.Name = "dataGridView3";
+            dataGridView3.RowTemplate.Height = 25;
+            dataGridView3.Size = new Size(830, 422);
+            dataGridView3.TabIndex = 0;
             // 
             // Form1
             // 

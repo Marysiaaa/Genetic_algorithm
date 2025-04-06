@@ -138,20 +138,23 @@ namespace genetic_algorithm
         {
             var algorytm = new Algorithm2();
 
-            var wynik = algorytm.Start();
+            var historiaPopulacji = algorytm.Start();
 
             var lista = new List<Model2>();
-            foreach (var rekord in wynik)
+            foreach (var populacja in historiaPopulacji)
             {
+                var najbardziejDopasowany = populacja.Value
+                    .OrderBy(v => v.Dopasowanie)
+                    .First();
+
                 lista.Add(new Model2
                 {
-                    Average = rekord.Value.Average(o => o.Dopasowanie),
-                    Dopasowanie = rekord.Value.Max(o => o.Dopasowanie),
-                    Generacja = rekord.Key + 1,
-                    Pa = rekord.Value.OrderByDescending(o => o.Dopasowanie).First().Pa,
-                    Pb = rekord.Value.OrderByDescending(o => o.Dopasowanie).First().Pb,
-                    Pc = rekord.Value.OrderByDescending(o => o.Dopasowanie).First().Pc,
-
+                    Average = populacja.Value.Average(o => o.Dopasowanie),
+                    Dopasowanie = najbardziejDopasowany.Dopasowanie,
+                    Generacja = populacja.Key + 1,
+                    Pa = najbardziejDopasowany.Pa,
+                    Pb = najbardziejDopasowany.Pb,
+                    Pc = najbardziejDopasowany.Pc
                 });
 
             }

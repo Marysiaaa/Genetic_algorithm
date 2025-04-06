@@ -1,7 +1,4 @@
-﻿using System.Numerics;
-using System.Security.Cryptography;
-
-namespace Zadanie_2
+﻿namespace Zadanie_2
 {
     public class Algorithm2
     {
@@ -26,55 +23,49 @@ namespace Zadanie_2
                 {
                     Osobnik zwyciezca = Turniej(populacja, rozmiarTurnieju);
                     nowaPopulacja.Add(zwyciezca);
-
                 }
 
+                (var dziecko1, var dziecko2) = Osobnik.Krzyzowanie(
+                    nowaPopulacja[0],
+                    nowaPopulacja[1]);
 
-                (var dziecko1, var dziecko2) = Osobnik.Krzyzowanie(nowaPopulacja[0], nowaPopulacja[1]);
                 nowaPopulacja[0] = dziecko1;
                 nowaPopulacja[1] = dziecko2;//Krzyżowanie osobnik 1 z 2 
 
+                (var dziecko3, var dziecko4) = Osobnik.Krzyzowanie(
+                    nowaPopulacja[2],
+                    nowaPopulacja[3]);
 
-                (var dziecko3, var dziecko4) = Osobnik.Krzyzowanie(nowaPopulacja[2], nowaPopulacja[3]);
                 nowaPopulacja[2] = dziecko3;
                 nowaPopulacja[3] = dziecko4; //Krzyżowanie osobnik 3 z 4 
 
-                (var dziecko9, var dziecko10) = Osobnik.Krzyzowanie(nowaPopulacja[8], nowaPopulacja[9]);
+                (var dziecko9, var dziecko10) = Osobnik.Krzyzowanie(
+                    nowaPopulacja[8],
+                    nowaPopulacja[9]);
+
                 nowaPopulacja[8] = dziecko9;
                 nowaPopulacja[9] = dziecko10; //Krzyżowanie osobnik 9 z 10
 
-                (var dziecko12, var dziecko13) = Osobnik.Krzyzowanie(nowaPopulacja[10], nowaPopulacja[11]);
+                (var dziecko12, var dziecko13) = Osobnik.Krzyzowanie(
+                    nowaPopulacja[10],
+                    nowaPopulacja[11]);
+
                 nowaPopulacja[10] = dziecko12;
                 nowaPopulacja[11] = dziecko13; //Krzyżowanie osobnik 12 z 13
 
-
-
-                nowaPopulacja[4] = nowaPopulacja[4].Mutacja();
-                nowaPopulacja[5] = nowaPopulacja[5].Mutacja();
-                nowaPopulacja[6] = nowaPopulacja[6].Mutacja();
-                nowaPopulacja[7] = nowaPopulacja[7].Mutacja();
-                nowaPopulacja[8] = nowaPopulacja[8].Mutacja();
-                nowaPopulacja[9] = nowaPopulacja[9].Mutacja();
-                nowaPopulacja[10] = nowaPopulacja[10].Mutacja();
-                nowaPopulacja[11] = nowaPopulacja[11].Mutacja();
-
+                for (int l = 4; l < nowaPopulacja.Count; l++)
+                {
+                    nowaPopulacja[l] = nowaPopulacja[l].Mutacja();
+                }
 
                 //Zachowanie najlepszego osobnika (hot deck)
-                Osobnik najlepszy = populacja.OrderByDescending(o => o.Dopasowanie).First();
+                Osobnik najlepszy = populacja.OrderBy(o => o.Dopasowanie).First();
                 nowaPopulacja.Add(najlepszy);
-
-
-
-                var najlepszeDopasowanie = nowaPopulacja.OrderByDescending(o => o.Dopasowanie).First();
-                double srednieDopasowanie = nowaPopulacja.Average(o => o.Dopasowanie);
-                Console.WriteLine($"Generacja {i + 1}: Najlepsze = {najlepszeDopasowanie.Dopasowanie}, Średnie = {srednieDopasowanie}");
-                Console.WriteLine($"Pa: {najlepszeDopasowanie.Pa}, Pb: {najlepszeDopasowanie.Pb},Pc: {najlepszeDopasowanie.Pc}");
                 populacja = nowaPopulacja;
-                nowaPopulacja.Add(najlepszy);
                 HistoriaPopulacji.Add(i, nowaPopulacja);
             }
-            return HistoriaPopulacji;
 
+            return HistoriaPopulacji;
         }
 
         private List<Osobnik> StworzPopulacje(int wielkoscPopulacji)
@@ -107,7 +98,7 @@ namespace Zadanie_2
                 indexy.Add(index);
                 turniej.Add(populacja[index]);
             }
-            return turniej.OrderByDescending(osobnik => osobnik.Dopasowanie).First();
+            return turniej.OrderBy(osobnik => osobnik.Dopasowanie).First();
         }
     }
 
@@ -135,15 +126,10 @@ namespace Zadanie_2
             this.ZDMin = ZDMin;
             this.ZDMax = ZDMax;
 
-
             Pa = Dekodowanie((chromosomy & 0b111100000000) >> 8);  // Bity 11-8
             Pb = Dekodowanie((chromosomy & 0b000011110000) >> 4);  // Bity 7-4
             Pc = Dekodowanie(chromosomy & 0b000000001111);         // Bity 3-0
             Dopasowanie = ObliczDopasowanie();
-        }
-        public Osobnik()
-        {
-
         }
 
         double Dekodowanie(int chromosomy)
@@ -174,16 +160,46 @@ namespace Zadanie_2
                 return Pa * Math.Sin(Pb * x + Pc);
             }
 
+            var bledyPomiarowe = new List<(double y, double fy, double bladPomiaru)>();
             var probki = BazaDanych.Probki;
             double suma = 0;
             foreach (List<double> pomiar in probki)
             {
                 var x = pomiar[0];
                 var y = pomiar[1];
-                suma += Math.Pow(y - przystosowanie(x), 2);
+                var fy = przystosowanie(x);
+                var roznicaPomiaru = Math.Pow(y - przystosowanie(x), 2);
+                bledyPomiarowe.Add((y, fy, roznicaPomiaru));
+                suma += roznicaPomiaru;
             }
-            return suma;
 
+            //var values = bledyPomiarowe
+            //    .Select(v => $"{v.y};{v.fy};{v.bladPomiaru}")
+            //    .ToList();
+
+            //if (!Directory.Exists("./bledy"))
+            //{
+            //    Directory.CreateDirectory("./bledy");
+            //}
+
+            //FileStream fs;
+            //if (!File.Exists("./bledy/bledy.txt"))
+            //{
+            //    fs = File.Create("./bledy/bledy.txt");
+            //}
+            //else
+            //{
+            //    fs = File.Open("./bledy/bledy.txt", FileMode.Append, FileAccess.Write);
+            //}
+
+            //using var sw = new StreamWriter(fs);
+
+            //foreach (var item in values)
+            //{
+            //    sw.WriteLine(item);
+            //}
+
+            return suma;
         }
 
         public Osobnik Mutacja()
@@ -194,9 +210,12 @@ namespace Zadanie_2
 
             return new Osobnik(mutacja, LBnP, LBnOs, ZDMin, ZDMax);
         }
-        public static (Osobnik, Osobnik) Krzyzowanie(Osobnik rodzic1, Osobnik rodzic2, int LBnOs)
-        {
 
+        public static (Osobnik, Osobnik) Krzyzowanie(
+            Osobnik rodzic1,
+            Osobnik rodzic2)
+        {
+            int LBnOs = rodzic1.LBnOs;
             int punktCiecia = rnd.Next(0, LBnOs - 2);
             ushort maska_dol = (ushort)((1 << punktCiecia) - 1);
             ushort maska_gora = (ushort)~maska_dol;
@@ -204,11 +223,11 @@ namespace Zadanie_2
             ushort chromosom1 = (ushort)((rodzic1.Chromosomy & maska_gora) | (rodzic2.Chromosomy & maska_dol));
             ushort chromosom2 = (ushort)((rodzic2.Chromosomy & maska_gora) | (rodzic1.Chromosomy & maska_dol));
 
-            Osobnik dziecko1 = new Osobnik();
-            Osobnik dziecko2 = new Osobnik();
+            Osobnik dziecko1 = new Osobnik(chromosom1, rodzic1.LBnP, rodzic1.LBnOs, rodzic1.ZDMin, rodzic1.ZDMax);
+            Osobnik dziecko2 = new Osobnik(chromosom2, rodzic2.LBnP, rodzic2.LBnOs, rodzic2.ZDMin, rodzic2.ZDMax);
 
 
-            return (dziecko1,dziecko2);
+            return (dziecko1, dziecko2);
         }
     }
 }
