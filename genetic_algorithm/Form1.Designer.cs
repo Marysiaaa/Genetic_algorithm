@@ -139,6 +139,7 @@
             button3.TabIndex = 1;
             button3.Text = "button3";
             button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
             // 
             // dataGridView3
             // 

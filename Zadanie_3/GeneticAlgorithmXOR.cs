@@ -1,52 +1,54 @@
-﻿namespace Zadanie_2
+﻿using Zadanie_3;
+
+namespace Zadanie_2
 {
-    public class Algorithm2
+    public class GeneticAlgorithmXOR
     {
-        public Dictionary<int, List<Osobnik>> HistoriaPopulacji = new Dictionary<int, List<Osobnik>>();
+        public Dictionary<int, List<OsobnikXOR>> HistoriaPopulacji = new Dictionary<int, List<OsobnikXOR>>();
         const int rozmiar_populacji = 13;
         const int rozmiarTurnieju = 3;
 
-        const int liczbaGeneracji = 100;
+        const int liczbaGeneracji = 1_000;
         const int LBnP = 4; // Liczba bitów na parametr
         const int LBnOs = 12; // Liczba wszystkich bitów(chromosomów) 
-        const double ZDMin = 0;
-        const double ZDMax = 3;
+        const double ZDMin = -10;
+        const double ZDMax = 10;
 
-        public Dictionary<int, List<Osobnik>> Start()
+        public Dictionary<int, List<OsobnikXOR>> Start()
         {
             var populacja = StworzPopulacje(rozmiar_populacji);
             for (int i = 0; i < liczbaGeneracji; i++)
             {
-                List<Osobnik> nowaPopulacja = new List<Osobnik>();
+                List<OsobnikXOR> nowaPopulacja = new List<OsobnikXOR>();
                 //Tworzenie nowej populacji 
                 for (int j = 0; j < rozmiar_populacji - 1; j++)
                 {
-                    Osobnik zwyciezca = Turniej(populacja, rozmiarTurnieju);
+                    OsobnikXOR zwyciezca = Turniej(populacja, rozmiarTurnieju);
                     nowaPopulacja.Add(zwyciezca);
                 }
 
-                (var dziecko1, var dziecko2) = Osobnik.Krzyzowanie(
+                (var dziecko1, var dziecko2) = OsobnikXOR.Krzyzowanie(
                     nowaPopulacja[0],
                     nowaPopulacja[1]);
 
                 nowaPopulacja[0] = dziecko1;
                 nowaPopulacja[1] = dziecko2;//Krzyżowanie osobnik 1 z 2 
 
-                (var dziecko3, var dziecko4) = Osobnik.Krzyzowanie(
+                (var dziecko3, var dziecko4) = OsobnikXOR.Krzyzowanie(
                     nowaPopulacja[2],
                     nowaPopulacja[3]);
 
                 nowaPopulacja[2] = dziecko3;
                 nowaPopulacja[3] = dziecko4; //Krzyżowanie osobnik 3 z 4 
 
-                (var dziecko9, var dziecko10) = Osobnik.Krzyzowanie(
+                (var dziecko9, var dziecko10) = OsobnikXOR.Krzyzowanie(
                     nowaPopulacja[8],
                     nowaPopulacja[9]);
 
                 nowaPopulacja[8] = dziecko9;
                 nowaPopulacja[9] = dziecko10; //Krzyżowanie osobnik 9 z 10
 
-                (var dziecko12, var dziecko13) = Osobnik.Krzyzowanie(
+                (var dziecko12, var dziecko13) = OsobnikXOR.Krzyzowanie(
                     nowaPopulacja[10],
                     nowaPopulacja[11]);
 
@@ -59,7 +61,7 @@
                 }
 
                 //Zachowanie najlepszego osobnika (hot deck)
-                Osobnik najlepszy = populacja.OrderBy(o => o.Dopasowanie).First();
+                OsobnikXOR najlepszy = populacja.OrderBy(o => o.Dopasowanie).First();
                 nowaPopulacja.Add(najlepszy);
                 populacja = nowaPopulacja;
                 HistoriaPopulacji.Add(i, nowaPopulacja);
@@ -68,25 +70,27 @@
             return HistoriaPopulacji;
         }
 
-        private List<Osobnik> StworzPopulacje(int wielkoscPopulacji)
+        private List<OsobnikXOR> StworzPopulacje(int wielkoscPopulacji)
         {
             Random rnd = new Random();
 
-            var populacja = new List<Osobnik>(wielkoscPopulacji);
+            var populacja = new List<OsobnikXOR>(wielkoscPopulacji);
             for (int j = 0; j < wielkoscPopulacji; j++)
             {
-                ushort chromosomy = (ushort)rnd.Next(0, 4096); // na 12bitach maksymalna liczba to 4096
-                populacja.Add(new Osobnik(chromosomy, LBnP, LBnOs, ZDMin, ZDMax));
+                var buffer = new byte[36];
+                rnd.NextBytes(buffer);
+                long chromosomy = BitConverter.ToInt64(buffer);
+                populacja.Add(new OsobnikXOR(chromosomy, LBnP, LBnOs, ZDMin, ZDMax));
             }
 
             return populacja;
         }
 
-        private Osobnik Turniej(List<Osobnik> populacja, int rozmiarTurnieju)
+        private OsobnikXOR Turniej(List<OsobnikXOR> populacja, int rozmiarTurnieju)
         {
             Random rnd = new Random();
 
-            var turniej = new List<Osobnik>();
+            var turniej = new List<OsobnikXOR>();
             var indexy = new HashSet<int>();
             while (indexy.Count < rozmiarTurnieju)
             {
@@ -102,23 +106,21 @@
         }
     }
 
-    public class Osobnik
+    public class OsobnikXOR
     {
         static Random rnd = new Random();
 
-        public double Pa;
-        public double Pb;
-        public double Pc;
-
         public double Dopasowanie;
-        public ushort Chromosomy { get; }
+        public double[][] wagi;
+
+        public long Chromosomy { get; }
         public int LBnP { get; }
         public int LBnOs { get; }
         public double ZDMin { get; }
         public double ZDMax { get; }
         public double ZD => ZDMax - ZDMin;
 
-        public Osobnik(ushort chromosomy, int LBnP, int LBnOs, double ZDMin, double ZDMax)
+        public OsobnikXOR(long chromosomy, int LBnP, int LBnOs, double ZDMin, double ZDMax)
         {
             Chromosomy = chromosomy;
             this.LBnP = LBnP;
@@ -126,9 +128,21 @@
             this.ZDMin = ZDMin;
             this.ZDMax = ZDMax;
 
-            Pa = Dekodowanie((chromosomy & 0b111100000000) >> 8);  // Bity 11-8
-            Pb = Dekodowanie((chromosomy & 0b000011110000) >> 4);  // Bity 7-4
-            Pc = Dekodowanie(chromosomy & 0b000000001111);         // Bity 3-0
+            var x1 = Dekodowanie((int)((chromosomy & 0xF00000000) >> 32));  // Bits 35-32 (4 bits)
+            var x2 = Dekodowanie((int)((chromosomy & 0x0F0000000) >> 28));  // Bits 31-28
+            var x3 = Dekodowanie((int)((chromosomy & 0x00F000000) >> 24));  // Bits 27-24
+            var x4 = Dekodowanie((int)((chromosomy & 0x000F00000) >> 20));  // Bits 23-20
+            var x5 = Dekodowanie((int)((chromosomy & 0x0000F0000) >> 16));  // Bits 19-16
+            var x6 = Dekodowanie((int)((chromosomy & 0x00000F000) >> 12));  // Bits 15-12
+            var x7 = Dekodowanie((int)((chromosomy & 0x000000F00) >> 8));   // Bits 11-8
+            var x8 = Dekodowanie((int)((chromosomy & 0x0000000F0) >> 4));   // Bits 7-4
+            var x9 = Dekodowanie((int)(chromosomy & 0x00000000F));          // Bits 3-0
+
+            var wagi_1 = new double[] { x1, x2, x3 };
+            var wagi_2 = new double[] { x4, x5, x6 };
+            var wagi_3 = new double[] { x7, x8, x9 };
+
+            wagi = new double[][] { wagi_1, wagi_2, wagi_3 };
 
             Dopasowanie = ObliczDopasowanie();
         }
@@ -137,7 +151,7 @@
         {
             if (chromosomy == 0)
             {
-                return 0; // Wartość minimalna
+                return 0; 
             }
 
             double ctmp = 0;
@@ -156,39 +170,47 @@
 
         private double ObliczDopasowanie()
         {
-            double przystosowanie(double x)
+            double przystosowanie(double[] wejscia, double[][] wagi)
             {
-                return Pa * Math.Sin(Pb * x + Pc);
+                var siecNeuronowa = new SiecNeuronowa(wejscia, wagi);
+                return siecNeuronowa.Start();
             }
 
             var bledyPomiarowe = new List<(double y, double fy, double bladPomiaru)>();
-            var probki = BazaDanych.Probki;
+            var probki = BazaDanych.probki;
+
             double suma = 0;
-            foreach (List<double> pomiar in probki)
+
+            int i = 0;
+            foreach (double[] probka in probki)
             {
-                var x = pomiar[0];
-                var y = pomiar[1];
-                var fy = przystosowanie(x);
-                var roznicaPomiaru = Math.Pow(y - przystosowanie(x), 2);
-                bledyPomiarowe.Add((y, fy, roznicaPomiaru));
+                var we1 = probka[0];
+                var we2 = probka[1];
+                var fy = przystosowanie(new double[] { we1, we2 }, wagi);
+
+                var roznicaPomiaru = Math.Pow(we2 - fy, 2);
+                bledyPomiarowe.Add((we2, fy, roznicaPomiaru));
+
                 suma += roznicaPomiaru;
+
+                i++;
             }
 
             return suma;
         }
 
-        public Osobnik Mutacja()
+        public OsobnikXOR Mutacja()
         {
             int b_punkt = rnd.Next(LBnOs);
             int maska = 1 << b_punkt;
-            ushort mutacja = (ushort)(Chromosomy ^ maska);
+            long mutacja = (long)(Chromosomy ^ maska);
 
-            return new Osobnik(mutacja, LBnP, LBnOs, ZDMin, ZDMax);
+            return new OsobnikXOR(mutacja, LBnP, LBnOs, ZDMin, ZDMax);
         }
 
-        public static (Osobnik, Osobnik) Krzyzowanie(
-            Osobnik rodzic1,
-            Osobnik rodzic2)
+        public static (OsobnikXOR, OsobnikXOR) Krzyzowanie(
+            OsobnikXOR rodzic1,
+            OsobnikXOR rodzic2)
         {
             int LBnOs = rodzic1.LBnOs;
             int punktCiecia = rnd.Next(0, LBnOs - 2);
@@ -198,8 +220,8 @@
             ushort chromosom1 = (ushort)((rodzic1.Chromosomy & maska_gora) | (rodzic2.Chromosomy & maska_dol));
             ushort chromosom2 = (ushort)((rodzic2.Chromosomy & maska_gora) | (rodzic1.Chromosomy & maska_dol));
 
-            Osobnik dziecko1 = new Osobnik(chromosom1, rodzic1.LBnP, rodzic1.LBnOs, rodzic1.ZDMin, rodzic1.ZDMax);
-            Osobnik dziecko2 = new Osobnik(chromosom2, rodzic2.LBnP, rodzic2.LBnOs, rodzic2.ZDMin, rodzic2.ZDMax);
+            OsobnikXOR dziecko1 = new OsobnikXOR(chromosom1, rodzic1.LBnP, rodzic1.LBnOs, rodzic1.ZDMin, rodzic1.ZDMax);
+            OsobnikXOR dziecko2 = new OsobnikXOR(chromosom2, rodzic2.LBnP, rodzic2.LBnOs, rodzic2.ZDMin, rodzic2.ZDMax);
 
 
             return (dziecko1, dziecko2);

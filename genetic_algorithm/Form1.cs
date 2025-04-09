@@ -109,6 +109,89 @@ namespace genetic_algorithm
             });
         }
 
+        private void InitializeDataGridView3()
+        {
+            dataGridView1.AutoGenerateColumns = false;
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.ReadOnly = true;
+
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "Generacja",
+                HeaderText = "Generacja",
+                Width = 80
+            });
+
+
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "x1",
+                HeaderText = "x1",
+                Width = 80
+            });
+
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "x2",
+                HeaderText = "x2",
+                Width = 150
+            });
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "x3",
+                HeaderText = "x3",
+                Width = 150
+            }); dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "x4",
+                HeaderText = "x4",
+                Width = 150
+            });
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "x5",
+                HeaderText = "x5",
+                Width = 150
+            });
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "x6",
+                HeaderText = "x6",
+                Width = 150
+            });
+
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "x7",
+                HeaderText = "x7",
+                Width = 150
+            });
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "x8",
+                HeaderText = "x8",
+                Width = 150
+            });
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "x9",
+                HeaderText = "x9",
+                Width = 150
+            });
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "Dopasowanie",
+                HeaderText = "Dopasowanie",
+                Width = 50
+            });
+
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "Average",
+                HeaderText = "Average",
+                Width = 60
+            });
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -160,6 +243,37 @@ namespace genetic_algorithm
             }
             dataGridView2.DataSource = lista;
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            var algorytm = new GeneticAlgorithmXOR();
+            var historiaPopulacji = algorytm.Start();
+            var lista = new List<Model3>();
+            foreach (var populacja in historiaPopulacji)
+            {
+                var najbardziejDopasowany = populacja.Value
+                    .OrderBy(v => v.Dopasowanie)
+                    .First();
+
+                lista.Add(new Model3
+                {
+                    Average = populacja.Value.Average(o => o.Dopasowanie),
+                    Dopasowanie = najbardziejDopasowany.Dopasowanie,
+                    Generacja = populacja.Key + 1,
+                    x1 = najbardziejDopasowany.wagi[0][0],
+                    x2 = najbardziejDopasowany.wagi[0][1],
+                    x3 = najbardziejDopasowany.wagi[0][2], //[[], [], []]
+                    x4 = najbardziejDopasowany.wagi[1][0],
+                    x5 = najbardziejDopasowany.wagi[1][1],
+                    x6 = najbardziejDopasowany.wagi[1][2],
+                    x7 = najbardziejDopasowany.wagi[2][0],
+                    x8 = najbardziejDopasowany.wagi[2][1],
+                    x9 = najbardziejDopasowany.wagi[2][2],
+                });
+
+            }
+            dataGridView3.DataSource = lista;
+        }
     }
 }
 public class Model
@@ -179,5 +293,23 @@ public class Model2
     public double Pc { get; set; }
     public double Dopasowanie { get; set; }
     public double Average { get; set; }
+}
+public class Model3
+{
+    public int Generacja { get; set; }
+    public double x1 { get; set; }
+    public double x2 { get; set; }
+    public double x3 { get; set; }
+    public double x4 { get; set; }
+    public double x5 { get; set; }
+    public double x6 { get; set; }
 
+    public double x7 { get; set; }
+    public double x8 { get; set; }
+    public double x9 { get; set; }
+
+
+
+    public double Dopasowanie { get; set; }
+    public double Average { get; set; }
 }
