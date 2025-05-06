@@ -38,6 +38,9 @@
             tabPage3 = new TabPage();
             button3 = new Button();
             dataGridView3 = new DataGridView();
+            tabPage4 = new TabPage();
+            button4 = new Button();
+            dataGridView4 = new DataGridView();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
@@ -45,6 +48,8 @@
             ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
             tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView3).BeginInit();
+            tabPage4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView4).BeginInit();
             SuspendLayout();
             // 
             // dataGridView1
@@ -54,25 +59,28 @@
             dataGridView1.Name = "dataGridView1";
             dataGridView1.Size = new Size(830, 363);
             dataGridView1.TabIndex = 0;
+            dataGridView1.CellContentClick += dataGridView1_CellContentClick;
             // 
             // button1
             // 
-            button1.Location = new Point(362, 490);
+            button1.BackColor = Color.Thistle;
+            button1.Location = new Point(345, 502);
             button1.Name = "button1";
-            button1.Size = new Size(121, 45);
+            button1.Size = new Size(156, 51);
             button1.TabIndex = 1;
             button1.Text = "Uruchom Zadanie 1 ";
-            button1.UseVisualStyleBackColor = true;
+            button1.UseVisualStyleBackColor = false;
             button1.Click += button1_Click;
             // 
             // button2
             // 
-            button2.Location = new Point(359, 471);
+            button2.BackColor = Color.Thistle;
+            button2.Location = new Point(339, 507);
             button2.Name = "button2";
-            button2.Size = new Size(122, 49);
+            button2.Size = new Size(164, 46);
             button2.TabIndex = 2;
             button2.Text = "Uruchom zadanie 2";
-            button2.UseVisualStyleBackColor = true;
+            button2.UseVisualStyleBackColor = false;
             button2.Click += button2_Click;
             // 
             // tabControl1
@@ -80,6 +88,7 @@
             tabControl1.Controls.Add(tabPage1);
             tabControl1.Controls.Add(tabPage2);
             tabControl1.Controls.Add(tabPage3);
+            tabControl1.Controls.Add(tabPage4);
             tabControl1.Location = new Point(12, 12);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
@@ -133,12 +142,13 @@
             // 
             // button3
             // 
-            button3.Location = new Point(363, 497);
+            button3.BackColor = Color.Thistle;
+            button3.Location = new Point(320, 508);
             button3.Name = "button3";
-            button3.Size = new Size(75, 23);
+            button3.Size = new Size(179, 45);
             button3.TabIndex = 1;
-            button3.Text = "button3";
-            button3.UseVisualStyleBackColor = true;
+            button3.Text = "Uruchom zadanie 3 ";
+            button3.UseVisualStyleBackColor = false;
             button3.Click += button3_Click;
             // 
             // dataGridView3
@@ -149,6 +159,40 @@
             dataGridView3.RowTemplate.Height = 25;
             dataGridView3.Size = new Size(830, 422);
             dataGridView3.TabIndex = 0;
+            dataGridView3.CellContentClick += dataGridView3_CellContentClick;
+            // 
+            // tabPage4
+            // 
+            tabPage4.Controls.Add(dataGridView4);
+            tabPage4.Controls.Add(button4);
+            tabPage4.Location = new Point(4, 24);
+            tabPage4.Name = "tabPage4";
+            tabPage4.Padding = new Padding(3);
+            tabPage4.Size = new Size(842, 559);
+            tabPage4.TabIndex = 3;
+            tabPage4.Text = "tabPage4";
+            tabPage4.UseVisualStyleBackColor = true;
+            tabPage4.Click += tabPage4_Click;
+            // 
+            // button4
+            // 
+            button4.BackColor = Color.Thistle;
+            button4.Location = new Point(350, 515);
+            button4.Name = "button4";
+            button4.Size = new Size(155, 38);
+            button4.TabIndex = 0;
+            button4.Text = "Uruchom zadanie 4 ";
+            button4.UseVisualStyleBackColor = false;
+            button4.Click += button4_Click;
+            // 
+            // dataGridView4
+            // 
+            dataGridView4.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView4.Location = new Point(6, 6);
+            dataGridView4.Name = "dataGridView4";
+            dataGridView4.RowTemplate.Height = 25;
+            dataGridView4.Size = new Size(830, 422);
+            dataGridView4.TabIndex = 1;
             // 
             // Form1
             // 
@@ -167,6 +211,8 @@
             ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();
             tabPage3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridView3).EndInit();
+            tabPage4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dataGridView4).EndInit();
             ResumeLayout(false);
         }
 
@@ -182,5 +228,8 @@
         private TabPage tabPage3;
         private Button button3;
         private DataGridView dataGridView3;
+        private TabPage tabPage4;
+        private Button button4;
+        private DataGridView dataGridView4;
     }
 }

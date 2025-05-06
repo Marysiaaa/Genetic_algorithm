@@ -274,6 +274,31 @@ namespace genetic_algorithm
             }
             dataGridView3.DataSource = lista;
         }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void tabPage5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridView3_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tabPage4_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 public class Model
@@ -313,3 +338,4 @@ public class Model3
     public double Dopasowanie { get; set; }
     public double Average { get; set; }
 }
+
