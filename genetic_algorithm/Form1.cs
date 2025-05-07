@@ -60,6 +60,7 @@ namespace genetic_algorithm
                 Width = 60
             });
         }
+
         private void InitializeDataGridView2()
         {
             dataGridView1.AutoGenerateColumns = false;
@@ -193,6 +194,54 @@ namespace genetic_algorithm
             });
         }
 
+
+
+
+        private void InitializeDataGridView4()
+        {
+            dataGridView1.AutoGenerateColumns = false;
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.ReadOnly = true;
+
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "Epoka",
+                HeaderText = "Epoka",
+                Width = 80
+            });
+
+
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "x1",
+                HeaderText = "x1",
+                Width = 80
+            });
+
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "x2",
+                HeaderText = "x2",
+                Width = 150
+            });
+
+
+
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "wyjscie_sieci",
+                HeaderText = "wyjscie_sieci",
+                Width = 150
+            });
+
+            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                DataPropertyName = "oczekiwane_wyjscia",
+                HeaderText = "oczekiwane_wyjscia",
+                Width = 150
+            });
+
+        }
         private void button1_Click(object sender, EventArgs e)
         {
 
@@ -293,10 +342,35 @@ namespace genetic_algorithm
         private void button4_Click(object sender, EventArgs e)
         {
 
+            var siec = new SiecNeuronowa();
+            siec.Start();
+            dataGridView4.DataSource = siec.wynikiUczenia;
+
+            var najmiejszyBlad = siec.wynikiUczenia[siec.wynikiUczenia.Count - 1];
+
+            if (najmiejszyBlad != null)
+            {
+                textBox1.Text = $" {najmiejszyBlad.blad_wyjscia}";
+            }
+            else
+            {
+                textBox1.Text = "Brak danych";
+            }
         }
 
         private void tabPage4_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            
 
         }
     }
@@ -338,4 +412,3 @@ public class Model3
     public double Dopasowanie { get; set; }
     public double Average { get; set; }
 }
-
