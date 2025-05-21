@@ -1,7 +1,6 @@
 using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
 using Zadanie_2;
-
 namespace genetic_algorithm
 {
     public partial class Form1 : Form
