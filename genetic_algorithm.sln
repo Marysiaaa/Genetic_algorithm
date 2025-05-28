@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zadanie_3", "Zadanie_3\Zada
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WstecznaPropagacja", "WstecznaPropagacja\WstecznaPropagacja.csproj", "{0E5B0C74-C98B-4B0B-A4EA-27DEF23C5A76}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "algorithmKnn", "algorithmKnn\algorithmKnn.csproj", "{5BEE8907-36CD-4CC1-9B81-40D23395B4C5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{0E5B0C74-C98B-4B0B-A4EA-27DEF23C5A76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E5B0C74-C98B-4B0B-A4EA-27DEF23C5A76}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E5B0C74-C98B-4B0B-A4EA-27DEF23C5A76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BEE8907-36CD-4CC1-9B81-40D23395B4C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BEE8907-36CD-4CC1-9B81-40D23395B4C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BEE8907-36CD-4CC1-9B81-40D23395B4C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BEE8907-36CD-4CC1-9B81-40D23395B4C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

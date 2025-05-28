@@ -39,10 +39,10 @@
             button3 = new Button();
             dataGridView3 = new DataGridView();
             tabPage4 = new TabPage();
-            dataGridView4 = new DataGridView();
-            button4 = new Button();
             label1 = new Label();
             textBox1 = new TextBox();
+            dataGridView4 = new DataGridView();
+            button4 = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
@@ -178,6 +178,23 @@
             tabPage4.UseVisualStyleBackColor = true;
             tabPage4.Click += tabPage4_Click;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(18, 444);
+            label1.Name = "label1";
+            label1.Size = new Size(166, 15);
+            label1.TabIndex = 5;
+            label1.Text = "Najmniejszy błąd uczenia sieci";
+            // 
+            // textBox1
+            // 
+            textBox1.Location = new Point(43, 471);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(100, 23);
+            textBox1.TabIndex = 4;
+            textBox1.TextChanged += textBox1_TextChanged_1;
+            // 
             // dataGridView4
             // 
             dataGridView4.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -197,22 +214,6 @@
             button4.Text = "Uruchom zadanie 4 ";
             button4.UseVisualStyleBackColor = false;
             button4.Click += button4_Click;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(18, 444);
-            label1.Name = "label1";
-            label1.Size = new Size(166, 15);
-            label1.TabIndex = 5;
-            label1.Text = "Najmniejszy błąd uczenia sieci";
-            // 
-            // textBox1
-            // 
-            textBox1.Location = new Point(43, 471);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(100, 23);
-            textBox1.TabIndex = 4;
             // 
             // Form1
             // 

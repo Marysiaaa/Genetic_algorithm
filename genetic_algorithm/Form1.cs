@@ -1,6 +1,7 @@
 using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
 using Zadanie_2;
+
 namespace genetic_algorithm
 {
     public partial class Form1 : Form
@@ -369,7 +370,12 @@ namespace genetic_algorithm
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            
+
+
+        }
+
+        private void textBox1_TextChanged_1(object sender, EventArgs e)
+        {
 
         }
     }
