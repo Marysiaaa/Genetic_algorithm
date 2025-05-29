@@ -9,8 +9,8 @@ namespace algorithmKnn
     internal static class DaneIris
     {
 
- public static  double[][] dane = new double[][]
-{
+        public static double[][] dane = new double[][]
+       {
     new double[] {6.5, 3.0, 5.2, 2.0, 3.0},
     new double[] {5.1, 2.5, 3.0, 1.1, 2.0},
     new double[] {4.9, 3.1, 1.5, 0.1, 1.0},
@@ -160,8 +160,8 @@ namespace algorithmKnn
     new double[] {5.5, 2.6, 4.4, 1.2, 2.0},
     new double[] {5.5, 3.5, 1.3, 0.2, 1.0},
     new double[] {6.4, 3.1, 5.5, 1.8, 3.0},
-    new double[] {5.4, 3.0, 4.5, 1.5, 2.0},
-};
+        new double[] {5.4, 3.0, 4.5, 1.5, 2.0},
+       };
 
 
 

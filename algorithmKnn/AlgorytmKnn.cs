@@ -1,96 +1,109 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace algorithmKnn
+﻿namespace algorithmKnn
 {
     internal class AlgorytmKnn
     {
-
         double[][] dane;
         private int[] klasy;
+        private double[] minWartosci; 
+        private double[] maxWartosci;
 
-        int K = 3;
         public enum Metryka
         {
             Euklidesowa,
-            Manhattan
+            Manhattan,
+            Chebysheva
         }
 
         public AlgorytmKnn(double[][] daneWejsciowe)
         {
+            // Walidacja danych
+            if (daneWejsciowe == null || daneWejsciowe.Length == 0)
+                throw new ArgumentException("Dane wejściowe nie mogą być puste");
+
             // Rozdzielenie danych na atrybuty i klasy
             dane = daneWejsciowe.Select(row => row.Take(row.Length - 1).ToArray()).ToArray();
             klasy = daneWejsciowe.Select(row => (int)row.Last()).ToArray();
-            // Normalizacja danych przy inicjalizacji
+
+            // Inicjalizacja tablic dla min/max
+            int liczbaAtrybutow = dane[0].Length;
+            minWartosci = new double[liczbaAtrybutow];
+            maxWartosci = new double[liczbaAtrybutow];
+
             NormalizujDane();
         }
 
         private void NormalizujDane()
         {
-            int numerAtrybutu = dane[0].Length - 1;
+            int numerAtrybutu = dane[0].Length;
 
             for (int attr = 0; attr < numerAtrybutu; attr++)
             {
                 // Szukanie min max 
-                double min = dane.Min(dane => dane[attr]);
-                double max = dane.Max(dane => dane[attr]);
+                double min = dane.Min(row => row[attr]);
+                double max = dane.Max(row => row[attr]);
 
-                // Noralizacja
+               
+                minWartosci[attr] = min;
+                maxWartosci[attr] = max;
+
+                // Normalizacja
                 for (int i = 0; i < dane.Length; i++)
                 {
-                    dane[i][attr] = (dane[i][attr] - min) / (max - min);
+                    if (max == min) 
+                        dane[i][attr] = 0;
+                    else
+                        dane[i][attr] = (dane[i][attr] - min) / (max - min);
                 }
             }
         }
 
-        static int KlasyfikacjaKNN(double[][] daneTreningowe, double[] probkaTestowa, int k, Metryka metryka)
+        private double[] NormalizujProbke(double[] probka)
         {
-            //obliczanie odległości
-            var odleglosci = new (double dystans, int klasa)[daneTreningowe.Length];
+            double[] znormalizowana = new double[probka.Length];
 
-            for (int i = 0; i < daneTreningowe.Length; i++)
+            for (int attr = 0; attr < probka.Length; attr++)
             {
-                double odleglosc = Wyliczdystans(
-                    probkaTestowa,
-                    daneTreningowe[i].Take(daneTreningowe[i].Length - 1).ToArray(), // pomijamy klasę
-                    metryka);
-
-                odleglosci[i] = (odleglosc, (int)daneTreningowe[i].Last());
+                if (maxWartosci[attr] == minWartosci[attr])
+                    znormalizowana[attr] = 0;
+                else
+                    znormalizowana[attr] = (probka[attr] - minWartosci[attr]) / (maxWartosci[attr] - minWartosci[attr]);
             }
 
-            //Najbliżsi sąsiedzi
+            return znormalizowana;
+        }
+
+        public int Klasyfikuj(double[] probka, Metryka metryka, int k)
+        {
+            double[] probkaZnormalizowana = NormalizujProbke(probka);
+
+            // Obliczanie odległości
+            var odleglosci = new (double dystans, int klasa)[dane.Length];
+            for (int i = 0; i < dane.Length; i++)
+            {
+                double odleglosc = Wyliczdystans(probkaZnormalizowana, dane[i], metryka);
+                odleglosci[i] = (odleglosc, klasy[i]);
+            }
+
+            // Najbliżsi sąsiedzi
             var najblizsiSasiedzi = odleglosci
                 .OrderBy(d => d.dystans)
                 .Take(k)
                 .ToArray();
 
-            // najczęściej występująca klasa
+            // Najczęściej występująca klasa
             var wynikiGlosowania = najblizsiSasiedzi
                 .GroupBy(n => n.klasa)
                 .Select(g => new { Klasa = g.Key, Liczba = g.Count() })
                 .OrderByDescending(g => g.Liczba)
                 .ToList();
 
-            // rozstrzyganie remisu
+            // Rozstrzyganie remisu
             if (wynikiGlosowania.Count > 1 && wynikiGlosowania[0].Liczba == wynikiGlosowania[1].Liczba)
             {
-                return wynikiGlosowania[0].Klasa;
+                return -1; // Obiekt niesklasyfikowany
             }
 
             return wynikiGlosowania[0].Klasa;
-        }
-        public int Klasyfikuj(double[] probka, Metryka metryka )
-        {
-            return KlasyfikacjaKNN(
-                dane.Zip(klasy, (d, k) => d.Append((double)k).ToArray()).ToArray(),
-                probka,
-                K,
-                metryka
-            );
         }
 
         static double Wyliczdystans(double[] v1, double[] v2, Metryka metryka)
@@ -101,15 +114,11 @@ namespace algorithmKnn
                     return MetrykaClass.MetrykaEuklidesowa(v1, v2);
                 case Metryka.Manhattan:
                     return MetrykaClass.MetrykaManhattan(v1, v2);
+                case Metryka.Chebysheva:
+                    return MetrykaClass.MetrykaChebysheva(v1, v2);
                 default:
                     throw new ArgumentException("Nieznana metryka");
             }
         }
-
-
     }
 }
-
-
-
-

@@ -72,13 +72,6 @@ namespace algorithmKnn
                 Width = 150
             });
 
-            dataGridView1.Columns.Add(new DataGridViewTextBoxColumn()
-            {
-                DataPropertyName = "CzyPoprawna",
-                HeaderText = "CzyPoprawna",
-                Width = 80
-            });
-
 
         }
 
@@ -89,6 +82,19 @@ namespace algorithmKnn
 
         private void button1_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(textBox2.Text))
+            {
+                MessageBox.Show("Nie poda³eœ parametru K");
+                return;
+            }
+
+            if (!int.TryParse(textBox2.Text, out int k)) 
+            {
+                MessageBox.Show("Parametr K jest liczb¹");
+                return;
+            }
+          
+
             var wybranaMetryka = (AlgorytmKnn.Metryka)comboBox1.SelectedItem;
             dataGridView1.Rows.Clear();
             dataGridView1.Columns.Clear();
@@ -115,7 +121,7 @@ namespace algorithmKnn
                     .ToArray();
 
                 var alg = new AlgorytmKnn(treningowe);
-                int przewidziana = alg.Klasyfikuj(testAtrybuty, wybranaMetryka);
+                int przewidziana = alg.Klasyfikuj(testAtrybuty, wybranaMetryka, k);
 
                 if (przewidziana == rzeczywista)
                     poprawne++;
@@ -124,12 +130,12 @@ namespace algorithmKnn
                 row.Add(rzeczywista.ToString());
                 row.Add(przewidziana.ToString());
                 dataGridView1.Rows.Add(row.ToArray());
-
-                double skutecznosc = 100.0 * poprawne / daneZKlasami.Length;
-                
-                 textBox1.Text=($"Skutecznoœæ: {skutecznosc:F2}%");
             }
 
+
+            double skutecznosc = 100.0 * poprawne / daneZKlasami.Length;
+
+            textBox1.Text = ($"Skutecznoœæ: {skutecznosc:F2}%");
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -138,6 +144,21 @@ namespace algorithmKnn
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
         {
 
         }
@@ -152,7 +173,7 @@ namespace algorithmKnn
 
         public int RzeczywistaKlasa { get; set; }
         public int PrzewidzianaKlasa { get; set; }
-        public bool CzyPoprawna => RzeczywistaKlasa == PrzewidzianaKlasa;
+      
 
     }
 }

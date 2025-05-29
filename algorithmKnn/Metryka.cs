@@ -28,5 +28,17 @@ namespace algorithmKnn
             }
             return sum;
         }
+
+        public static double MetrykaChebysheva(double[] v1, double[] v2)
+        {
+            double max = 0;
+            for (int i = 0; i < v1.Length; i++)
+            {
+                double diff = Math.Abs(v1[i] - v2[i]);
+                if (diff > max)
+                    max = diff;
+            }
+            return max;
+        }
     }
 }
